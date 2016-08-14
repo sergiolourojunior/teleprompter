@@ -6,4 +6,4 @@ Teleprompter (ou teleponto) desenvolvido com  html5, css3 e jquery.
 -Cor do fundo;
 -Cor da fonte;
 -Tamanho da fonte;
--Velocidade de rolagem.
+<p>-Velocidade de rolagem.</p>
