@@ -1,33 +1,29 @@
-executando = false;
-
+var executando = false,
+scroll_top = 0,
+padrao = ['#000000','#ffffff','60','10'];
 
 function reset(){
 	//variaveis default
-	velocidade = 10;
-	corLetra = '#FFFFFF';
-	corFundo = '#000000';
-	tamLetra = '60';
-	scroll_top = 0;
 
-	var conteudo = $('#conteudo');
-	var texto = $("#texto");
+	 var conteudo = $('#conteudo'), 
+	 texto = $("#texto");
 
-	conteudo.css({'color': corLetra, 'background-color': corFundo, 'font-size': tamLetra+'px'});
+	conteudo.css({'color': padrao[1], 'background-color': padrao[0], 'font-size': padrao[2]+'px'});
 
 	texto.css({'margin-top': $(window).height(), 'margin-bottom': $(window).height()});
 
 	if(executando)
 	{
-		pausar();
+		mover(false);
 	}
 
 	conteudo.scrollTop(0);
 
-	//resetar formulario
-	$("#corFundo").val(corFundo);
-	$("#corLetra").val(corLetra);
-	$("#tamLetra").val(tamLetra);
-	$("#velocidade").val(velocidade);
+
+$('nav input[type=color],input[type=range]').each(function(index){
+var input=$(this);
+	input.val(padrao[index]);
+});
 }
 
 
@@ -60,36 +56,33 @@ function mudarTamLetra (tamanho){
 
 function mudarVelocidade(valor){
 
-	velocidade = valor;
+	var velocidade = valor;
 
-	pausar();
-	iniciar();
-
-}
-
-
-function iniciar(speed = velocidade){
-
-	var conteudo = $("#conteudo");
-	var texto = $('#texto');
-
-	executando = true;
-
-	intervalo = setInterval(function(){
-		$("#conteudo").scrollTop(scroll_top);
-
-		scroll_top = scroll_top + 1;
-
-	}, speed);
+	mover(false,velocidade);
+	mover(true,velocidade);
 
 }
 
 
-function pausar(){
-	clearInterval(intervalo);
+function mover(status,speed = padrao[3]){
 
-	executando = false;
+	var conteudo = $("#conteudo"),
+	texto = $('#texto'),
+	intervalo=setInterval(frame, speed);
+
+
+	function frame(){
+		if(executando == false){
+			clearInterval(intervalo);
+		}else{
+			$("#conteudo").scrollTop(scroll_top);
+			scroll_top = scroll_top + 1;
+
+		}
+	}
+	executando=status;
 }
+
 
 
 $(document).ready(function(){
@@ -98,5 +91,30 @@ $(document).ready(function(){
 
 	var conteudo = $('#conteudo');
 	conteudo.css({'height': $(window).height()});
+
+
+
+$('#textContent').click(function(){
+	$('.modal-cover').fadeToggle();
+});
+
+$('.modal .btn-submit').click(function(){
+
+var texto=$('#content').val();
+
+$('#texto').text(texto);
+$('.modal-cover').fadeToggle();
+$('#content').val('');
+});
+
+$('.modal-cover').click(function(e){
+
+	if(e.target !== this) return;
+
+	$(this).fadeToggle();
+
+});
+
+
 
 });
